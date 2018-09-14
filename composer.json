@@ -6,6 +6,7 @@
     }
   ],
   "require": {
-    "PHPOffice/PhpSpreadsheet": "dev-master"
+    "PHPOffice/PhpSpreadsheet": "dev-master",
+    "phpunit/phpunit": "6.5.13"
   }
 }
