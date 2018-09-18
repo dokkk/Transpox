@@ -5,6 +5,11 @@
       "url": "https://github.com/PHPOffice/PhpSpreadsheet"
     }
   ],
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  },
   "require": {
     "PHPOffice/PhpSpreadsheet": "dev-master",
     "phpunit/phpunit": "6.5.13"
