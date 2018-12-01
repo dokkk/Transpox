@@ -8,9 +8,9 @@
 namespace Transpox\Resources\Source;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use Transpox\Resources\AbstractPhpOfficeFile;
+use Transpox\Resources\AbstractFile;
 
-class PhpOfficeSource extends AbstractPhpOfficeFile implements SourceInterface
+class PhpOfficeSource extends AbstractFile implements SourceInterface
 {
     protected $sourceSheet;
     protected $sourceHeaders;
@@ -18,14 +18,18 @@ class PhpOfficeSource extends AbstractPhpOfficeFile implements SourceInterface
     /**
      * PhpOfficeSource constructor.
      * @param resource $file
-     * @param IOFactory $factory
+     * @throws EmptySourceException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public function __construct(resource $file, IOFactory $factory)
+    public function __construct($file)
     {
-        parent::__construct($file, $factory);
-        $this->sourceSheet = $this->factory::load($this->file);
+        parent::__construct($file);
+        $content = stream_get_contents($file);
+        if (empty($content)) {
+            throw new EmptySourceException('The Source file cannot be empty');
+        }
+        $this->sourceSheet = IOFactory::load($this->fileName);
         $this->sourceHeaders = $this->getHeaders();
     }
 

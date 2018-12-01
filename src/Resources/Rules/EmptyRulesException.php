@@ -8,7 +8,7 @@
 namespace Transpox\Resources\Rules;
 
 
-class EmptyRulesException
+class EmptyRulesException extends \Exception
 {
 
 }

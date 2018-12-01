@@ -9,53 +9,48 @@ namespace Transpox\Resources\Rules;
 
 
 use Transpox\Resources\AbstractFile;
+use Transpox\Resources\BadJSONException;
 
 class JSONRules extends AbstractFile implements RulesInterface
 {
-    private $content;
     private $sources;
     private $destinations;
     private $rules;
 
-    /** @inheritdoc */
+    /** @inheritdoc
+     * @param $file
+     * @throws BadJSONException
+     * @throws EmptyRulesException
+     */
     public function __construct($file)
     {
         parent::__construct($file);
-        //TO DO: $file is a resource, convert it?
-        $this->content = json_decode(stream_get_contents($file));
-        $this->sources = $this->content->sources;
-        $this->destinations = $this->content->destinations;
-        $this->rules = $this->content->rules;
+        $content = stream_get_contents($file);
+        if (empty($content)) {
+            throw new EmptyRulesException('The Rules file cannot be empty');
+        }
+        $content = json_decode(stream_get_contents($file));
+        if ($content == null || strtoupper($content) == 'NULL') {
+            throw new BadJSONException('The Rules files contains bad JSON data');
+        }
+        $this->sources = $content->sources;
+        $this->destinations = $content->destinations;
+        $this->rules = $content->rules;
     }
 
-    /**
-     * Return all the rules
-     * @return mixed
-     */
-    public function getAll()
-    {
-        return $this->content;
-    }
-
-    /**
-     * @return mixed
-     */
+    /** @inheritdoc */
     public function getSources()
     {
         return $this->sources;
     }
 
-    /**
-     * @return mixed
-     */
+    /** @inheritdoc */
     public function getDestinations()
     {
         return $this->destinations;
     }
 
-    /**
-     * @return mixed
-     */
+    /** @inheritdoc */
     public function getRules()
     {
         return $this->rules;

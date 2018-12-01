@@ -8,7 +8,6 @@
 namespace Transpox\Resources;
 
 
-class BadJSONException
+class BadJSONException extends \Exception
 {
-
 }

@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 class PhpOfficeDestinationTest extends TestCase
 {
-
     public function testShouldFailIfFileIsNotSaved()
     {
         $fileName = '/Users/dcaruso/projects/Transpox/tests/files/PhpOfficeTest1';

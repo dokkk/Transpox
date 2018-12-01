@@ -15,11 +15,18 @@ abstract class AbstractFile
     protected $file;
 
     /**
+     * @var string $fileName
+     */
+    protected $fileName;
+
+    /**
      * AbstractDestinationFile constructor.
      * @param resource $file
      */
     public function __construct($file)
     {
         $this->file = $file;
+        $meta_data = stream_get_meta_data($this->file);
+        $this->fileName = $meta_data["uri"];
     }
 }

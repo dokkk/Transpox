@@ -8,14 +8,10 @@
 namespace Transpox\Resources\Destination;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use Transpox\Resources\AbstractPhpOfficeFile;
+use Transpox\Resources\AbstractFile;
 
-class PhpOfficeDestination extends AbstractPhpOfficeFile implements DestinationInterface
+class PhpOfficeDestination extends AbstractFile implements DestinationInterface
 {
-    /**
-     * @var string $fileName
-     */
-    protected $fileName;
 
     /**
      * @var string $fileType
@@ -25,25 +21,24 @@ class PhpOfficeDestination extends AbstractPhpOfficeFile implements DestinationI
     /**
      * PhpOfficeDestination constructor.
      * @param resource $file
-     * @param IOFactory $factory
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public function __construct($file, IOFactory $factory)
+    public function __construct($file)
     {
-        parent::__construct($file, $factory);
-        $meta_data = stream_get_meta_data($this->file);
-        $this->fileName = $meta_data["uri"];
-        $this->fileType = $factory::identify($this->fileName);
+        parent::__construct($file);
+        $this->fileType = IOFactory::identify($this->fileName);
     }
 
     /**
      * Save the $content in the destination
      * @param $content
+     * @return string
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
     public function save($content)
     {
-        $writer = $this->factory::createWriter($content, $this->fileType);
+        $writer = IOFactory::createWriter($content, $this->fileType);
         $writer->save($this->fileName);
+        return $this->fileName;
     }
 }

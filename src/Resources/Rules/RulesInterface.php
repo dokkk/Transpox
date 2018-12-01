@@ -10,11 +10,15 @@ namespace Transpox\Resources\Rules;
 interface RulesInterface
 {
     /**
-     * Return all the rules
-     * @return mixed
+     * @return array
      */
-    public function getAll();
     public function getSources();
+    /**
+     * @return array
+     */
     public function getDestinations();
+    /**
+     * @return array
+     */
     public function getRules();
 }
