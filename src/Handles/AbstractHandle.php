@@ -5,101 +5,59 @@ namespace Transpox\Handles;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Transpox\Resources\ResourcesInterface;
 
 abstract class AbstractHandle implements HandleInterface
 {
     /**
-     * @var resource $sourceFile
+     * @var ResourcesInterface $resources
      */
-    protected $sourceFile;
+    protected $resources;
 
     /**
-     * @var resource $destinationFile
-     */
-    protected $destinationFile;
-
-    /**
-     * @var resource $transposeRulesFile
-     */
-    protected $transposeRulesFile;
-
-    /**
-     * @var bool $forceCheck
+     * @var boolean $forceCheck
      */
     protected $forceCheck;
 
     /**
-     * @var IOFactory $loaderFactory
+     * @var boolean $includeDestinationHeaders
      */
-    protected $loaderFactory;
-
-    /**
-     * @var Spreadsheet $sourceSheet
-     */
-    protected $sourceSheet;
-
-    /**
-     * @var array $sourceHeaders
-     */
-    protected $sourceHeaders;
-
-    /**
-     * @var Spreadsheet $destinationSheet
-     */
-    protected $destinationSheet;
+    protected $includeDestinationHeaders;
 
     /**
      * AbstractHandle constructor.
-     * @param resource $sourceFile
-     * @param resource $destinationFile
+     * if $includeDestinationHeaders is false, the destination is built without headers
+     * @param ResourcesInterface $resources
      * @param bool $forceCheck
-     * @param IOFactory $loaderFactory
-     * @param resource|null $transposeRulesFile
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     * @param bool $includeDestinationHeaders
      */
-    public function __construct(resource $sourceFile, resource $destinationFile, bool $forceCheck = true, IOFactory $loaderFactory, resource $transposeRulesFile = null)
+    public function __construct(ResourcesInterface $resources, bool $forceCheck = true, bool $includeDestinationHeaders = true)
     {
-        $this->sourceFile = $sourceFile;
-        $this->sourceSheet = $this->loaderFactory::load($this->sourceFile);
-        $this->sourceHeaders = $this->getHeaders($this->sourceSheet->getActiveSheet());
-        if(empty($this->sourceHeaders) && $forceCheck) {
-            throw new \InvalidArgumentException("The source file is empty");
-        }
-        $this->destinationFile = $destinationFile;
+        $this->resources = $resources;
         $this->forceCheck = $forceCheck;
-        $this->loaderFactory = $loaderFactory;
-        $this->transposeRulesFile = $transposeRulesFile;
+        $this->includeDestinationHeaders = $includeDestinationHeaders;
+        $this->validate();
     }
 
     /**
-     * @param Worksheet $worksheet
-     * @return array
+     * Validate the resources
      */
-    protected function getHeaders(Worksheet $worksheet)
+    protected function validate()
     {
-        $row = $worksheet->getRowIterator(1, 1)->current();
-        $cellIterator = $row->getCellIterator();
-        $headers = [];
-        foreach ($cellIterator as $cell) {
-            if(!empty($cell->getValue())) {
-                $headers[] = $cell->getValue();
+        if ($this->forceCheck) {
+            if (empty($this->resources->getRules()->getAll())) {
+                throw new \InvalidArgumentException('Rules file cannot be empty');
+            }
+
+            if (!empty($this->resources->getSource()) &&
+                !empty($this->resources->getDestination())) {
+
+            }
+
+            $sourceHeaders = $this->resources->getSource()->getHeaders();
+            if(empty($sourceHeaders)) {
+                throw new \InvalidArgumentException("The source file is empty");
             }
         }
-        return $headers;
     }
-
-    /**
-     * @return \PhpOffice\PhpSpreadsheet\Writer\IWriter
-     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
-     */
-    protected function getDestinationWriter()
-    {
-        $meta_data = stream_get_meta_data($this->destinationFile);
-        $filename = $meta_data["uri"];
-        $filetype = IOFactory::identify($filename);
-        return IOFactory::createWriter($this->sourceSheet, $filetype);
-    }
-
 }
