@@ -17,16 +17,14 @@ class PhpOfficeSourceTest extends TestCase
     {
         $this->expectException(EmptySourceException::class);
         $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testEmpty.csv';
-        $file = fopen($fileName, 'r');
-        $phpOfficeSource = new PhpOfficeSource($file);
+        $phpOfficeSource = new PhpOfficeSource($fileName);
     }
 
     public function testShouldReturnTrueWhenHeadersAreEmpty()
     {
         $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testEmptyHeaders.csv';
-        $file = fopen($fileName, 'r');
-        $phpOfficeSource = new PhpOfficeSource($file);
+        $phpOfficeSource = new PhpOfficeSource($fileName);
         $headers = $phpOfficeSource->getHeaders();
-        $this->assertEmpty($headers, 'Header array is empty');
+        $this->assertEmpty($headers, 'Header array is not empty as expected');
     }
 }

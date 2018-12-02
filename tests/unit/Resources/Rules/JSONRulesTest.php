@@ -18,15 +18,13 @@ class JSONRulesTest extends TestCase
     {
         $this->expectException(EmptyRulesException::class);
         $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testEmpty.js';
-        $file = fopen($fileName, 'r');
-        $jsonRules = new JSONRules($file);
+        $jsonRules = new JSONRules($fileName);
     }
 
     public function testShouldThrowJsonExceptionIfJSONContentisBad()
     {
         $this->expectException(BadJSONException::class);
         $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testBadJSONContent.js';
-        $file = fopen($fileName, 'r');
-        $jsonRules = new JSONRules($file);
+        $jsonRules = new JSONRules($fileName);
     }
 }

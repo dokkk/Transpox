@@ -18,19 +18,21 @@ class JSONRules extends AbstractFile implements RulesInterface
     private $rules;
 
     /** @inheritdoc
-     * @param $file
+     * @param string $fileName
      * @throws BadJSONException
      * @throws EmptyRulesException
      */
-    public function __construct($file)
+    public function __construct($fileName)
     {
-        parent::__construct($file);
-        $content = stream_get_contents($file);
+        parent::__construct($fileName);
+        $content = $this->getFileContent();
         if (empty($content)) {
             throw new EmptyRulesException('The Rules file cannot be empty');
         }
-        $content = json_decode(stream_get_contents($file));
-        if ($content == null || strtoupper($content) == 'NULL') {
+        $content = json_decode($content);
+        if ($content == null ||
+            strtoupper($content) == 'NULL' ||
+            !is_object($content)) {
             throw new BadJSONException('The Rules files contains bad JSON data');
         }
         $this->sources = $content->sources;

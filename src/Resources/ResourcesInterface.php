@@ -13,6 +13,11 @@ use Transpox\Resources\Source\SourceInterface;
 
 interface ResourcesInterface
 {
+    const FILE_READ = 'w';
+
+    const FILE_OVERWRITE = 'w';
+
+    const FILE_APPEND = 'a';
     /**
      * @return SourceInterface
      */
@@ -24,7 +29,7 @@ interface ResourcesInterface
     public function getDestination(): DestinationInterface;
 
     /**
-     * @return RulesInterface
+     * @return RulesInterface|null
      */
-    public function getRules(): RulesInterface;
+    public function getRules();
 }

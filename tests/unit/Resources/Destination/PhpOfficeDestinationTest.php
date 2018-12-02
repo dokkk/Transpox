@@ -15,11 +15,9 @@ class PhpOfficeDestinationTest extends TestCase
     public function testShouldFailIfFileIsNotSaved()
     {
         $fileName = '/Users/dcaruso/projects/Transpox/tests/files/PhpOfficeTest1';
-        $file = fopen($fileName, 'w');
-        $phpOfficeDestination = new PhpOfficeDestination($file);
+        $phpOfficeDestination = new PhpOfficeDestination($fileName);
         $content = new Spreadsheet();
         $savedFile = $phpOfficeDestination->save($content);
         $this->assertFileExists($savedFile, 'The file has not be saved');
-        fclose($file);
     }
 }
