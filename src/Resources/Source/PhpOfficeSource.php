@@ -12,35 +12,45 @@ use Transpox\Resources\AbstractFile;
 
 class PhpOfficeSource extends AbstractFile implements SourceInterface
 {
-    protected $sourceSheet;
-    protected $sourceHeaders;
+    protected $headers;
+    protected $content;
+    protected $fullContent;
 
     /**
      * PhpOfficeSource constructor.
-     * @param resource $file
+     * @param string $fileName
      * @throws EmptySourceException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
-    public function __construct($file)
+    public function __construct($fileName)
     {
-        parent::__construct($file);
-        $content = stream_get_contents($file);
+        parent::__construct($fileName);
+        $content = $this->getFileContent();
         if (empty($content)) {
             throw new EmptySourceException('The Source file cannot be empty');
         }
-        $this->sourceSheet = IOFactory::load($this->fileName);
-        $this->sourceHeaders = $this->getHeaders();
+        $this->fullContent = $this->readFullContent();
+        $this->headers = $this->readHeaders();
+        $this->content = $this->readContent();
     }
 
     /**
-     * Return an array containing the source headers
+     * @return \PhpOffice\PhpSpreadsheet\Spreadsheet
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
+    protected function readFullContent()
+    {
+        return IOFactory::load($this->fileName);
+    }
+
+    /**
      * @return array
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function getHeaders(): array
+    protected function readHeaders(): array
     {
-        $row = $this->sourceSheet->getActiveSheet()->getRowIterator(1, 1)->current();
+        $row = $this->fullContent->getActiveSheet()->getRowIterator(1, 1)->current();
         $cellIterator = $row->getCellIterator();
         $headers = [];
         foreach ($cellIterator as $cell) {
@@ -49,5 +59,57 @@ class PhpOfficeSource extends AbstractFile implements SourceInterface
             }
         }
         return $headers;
+    }
+
+    /**
+     * @return array
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    protected function readContent(): array
+    {
+        $activeSheet = $this->fullContent->getActiveSheet();
+        $rows = [];
+        $numberOfRows = $activeSheet->getHighestRow();
+        //if only 1 row present, return empty array
+        //TO DO check if right or a flag needed to avoid it
+        if ($numberOfRows == 1) {
+            return $rows;
+        }
+        $rowIterator = $activeSheet->getRowIterator(1);
+        foreach($rowIterator as $row) {
+            $cellIterator = $row->getCellIterator();
+            $cells = [];
+            foreach ($cellIterator as $cell) {
+                if(!empty($cell->getValue())) {
+                    $cells[] = $cell->getValue();
+                }
+            }
+            $rows[] = $cells;
+        }
+        return $rows;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHeaders(): array
+    {
+        return$this->headers;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContent(): array
+    {
+        return $this->content;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFullContent()
+    {
+        return $this->fullContent;
     }
 }

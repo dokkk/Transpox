@@ -22,11 +22,11 @@ class Resources implements ResourcesInterface
      */
     protected $destination;
     /**
-     * @var RulesInterface $rules
+     * @var RulesInterface|null $rules
      */
     protected $rules;
 
-    public function __construct(SourceInterface $source, DestinationInterface $destination, RulesInterface $rules)
+    public function __construct(SourceInterface $source, DestinationInterface $destination, RulesInterface $rules = null)
     {
         $this->source = $source;
         $this->destination = $destination;
@@ -50,9 +50,9 @@ class Resources implements ResourcesInterface
     }
 
     /**
-     * @return RulesInterface
+     * @return RulesInterface|null
      */
-    public function getRules(): RulesInterface
+    public function getRules()
     {
         return $this->rules;
     }

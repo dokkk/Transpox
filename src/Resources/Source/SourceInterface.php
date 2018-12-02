@@ -14,4 +14,16 @@ interface SourceInterface
      * @return array
      */
     public function getHeaders(): array;
+
+    /**
+     * Return the content without the header
+     * @return array
+     */
+    public function getContent(): array;
+
+    /**
+     * Return the full content
+     * @return mixed
+     */
+    public function getFullContent();
 }

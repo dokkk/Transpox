@@ -10,23 +10,24 @@ namespace Transpox\Resources;
 abstract class AbstractFile
 {
     /**
-     * @var resource $file
-     */
-    protected $file;
-
-    /**
      * @var string $fileName
      */
     protected $fileName;
 
     /**
      * AbstractDestinationFile constructor.
-     * @param resource $file
+     * @param string $fileName
      */
-    public function __construct($file)
+    public function __construct($fileName)
     {
-        $this->file = $file;
-        $meta_data = stream_get_meta_data($this->file);
-        $this->fileName = $meta_data["uri"];
+        $this->fileName = $fileName;
+    }
+
+    protected function getFileContent()
+    {
+        $file = fopen($this->fileName, 'r');
+        $content = stream_get_contents($file);
+        fclose($file);
+        return $content;
     }
 }
