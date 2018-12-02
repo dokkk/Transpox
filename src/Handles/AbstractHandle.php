@@ -36,28 +36,5 @@ abstract class AbstractHandle implements HandleInterface
         $this->resources = $resources;
         $this->forceCheck = $forceCheck;
         $this->includeDestinationHeaders = $includeDestinationHeaders;
-        $this->validate();
-    }
-
-    /**
-     * Validate the resources
-     */
-    protected function validate()
-    {
-        if ($this->forceCheck) {
-            if (empty($this->resources->getRules()->getAll())) {
-                throw new \InvalidArgumentException('Rules file cannot be empty');
-            }
-
-            if (!empty($this->resources->getSource()) &&
-                !empty($this->resources->getDestination())) {
-
-            }
-
-            $sourceHeaders = $this->resources->getSource()->getHeaders();
-            if(empty($sourceHeaders)) {
-                throw new \InvalidArgumentException("The source file is empty");
-            }
-        }
     }
 }

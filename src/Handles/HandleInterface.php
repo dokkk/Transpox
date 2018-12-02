@@ -5,5 +5,8 @@ namespace Transpox\Handles;
 
 interface HandleInterface
 {
-    public function transpose(): resource;
+    /**
+     * @return resource
+     */
+    public function transpose();
 }
