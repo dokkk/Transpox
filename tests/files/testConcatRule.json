@@ -1,0 +1,10 @@
+{
+  "rules":
+    {"concat":
+      {
+        "sources": {"names": ["salutation", "name", "surname"]},
+        "destinations": {"names": ["full_name", "address_name"]},
+        "params": [" "]
+      }
+    }
+}

@@ -19,7 +19,7 @@ class PhpOfficeSource extends AbstractFile implements SourceInterface
     /**
      * PhpOfficeSource constructor.
      * @param string $fileName
-     * @throws EmptySourceException
+     * @throws EmptySourceFileException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
@@ -28,7 +28,7 @@ class PhpOfficeSource extends AbstractFile implements SourceInterface
         parent::__construct($fileName);
         $content = $this->getFileContent();
         if (empty($content)) {
-            throw new EmptySourceException('The Source file cannot be empty');
+            throw new EmptySourceFileException('The Source file cannot be empty');
         }
         $this->fullContent = $this->readFullContent();
         $this->headers = $this->readHeaders();

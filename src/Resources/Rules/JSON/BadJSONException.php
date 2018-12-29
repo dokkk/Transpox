@@ -5,7 +5,7 @@
  * Time: 17:08
  */
 
-namespace Transpox\Resources;
+namespace Transpox\Resources\Rules\JSON;
 
 
 class BadJSONException extends \Exception

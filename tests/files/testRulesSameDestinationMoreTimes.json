@@ -1,0 +1,23 @@
+{
+  "destinations": {"names": ["description", "price"]},
+  "rules":
+    {"math":
+      [
+        {
+          "sources": {"name": ["name"]},
+          "destinations": {"names":["name", "description"]},
+          "params": ["-"]
+        },
+        {
+          "sources": {"name": ["price", "discount"]},
+          "destinations": {"names":["price"]},
+          "params": ["-"]
+        },
+        {
+          "sources": {"name": ["price", "vat"]},
+          "destinations": {"names":["price"]},
+          "params": ["*"]
+        }
+      ]
+    }
+}

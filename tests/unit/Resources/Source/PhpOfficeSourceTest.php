@@ -8,14 +8,14 @@
 namespace Transpox\Tests\Resources\Source;
 
 use PHPUnit\Framework\TestCase;
-use Transpox\Resources\Source\EmptySourceException;
+use Transpox\Resources\Source\EmptySourceFileException;
 use Transpox\Resources\Source\PhpOfficeSource;
 
 class PhpOfficeSourceTest extends TestCase
 {
     public function testShouldThrowEmptyRulesExceptionIfFileIsEmpty()
     {
-        $this->expectException(EmptySourceException::class);
+        $this->expectException(EmptySourceFileException::class);
         $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testEmpty.csv';
         $phpOfficeSource = new PhpOfficeSource($fileName);
     }

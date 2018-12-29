@@ -8,6 +8,6 @@
 namespace Transpox\Resources\Source;
 
 
-class EmptySourceException extends \Exception
+class EmptySourceFileException extends \Exception
 {
 }
