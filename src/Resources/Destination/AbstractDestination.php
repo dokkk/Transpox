@@ -5,9 +5,9 @@
  * Time: 21:07
  */
 
-namespace Transpox\Resources;
+namespace Transpox\Resources\Destination;
 
-abstract class AbstractFile
+abstract class AbstractDestination
 {
     /**
      * @var string $fileName
@@ -15,19 +15,16 @@ abstract class AbstractFile
     protected $fileName;
 
     /**
-     * AbstractFile constructor.
+     * @var string $fileType
+     */
+    protected $fileType;
+
+    /**
+     * AbstractOrigin constructor.
      * @param string $fileName
      */
     public function __construct($fileName)
     {
         $this->fileName = $fileName;
-    }
-
-    protected function getFileContent()
-    {
-        $file = fopen($this->fileName, 'r');
-        $content = stream_get_contents($file);
-        fclose($file);
-        return $content;
     }
 }

@@ -9,7 +9,7 @@ namespace Transpox\Resources;
 
 use Transpox\Resources\Destination\DestinationInterface;
 use Transpox\Resources\Rules\RulesInterface;
-use Transpox\Resources\Source\SourceInterface;
+use Transpox\Resources\Destination\OriginInterface;
 
 interface ResourcesInterface
 {
@@ -19,9 +19,9 @@ interface ResourcesInterface
 
     const FILE_APPEND = 'a';
     /**
-     * @return SourceInterface
+     * @return OriginInterface
      */
-    public function getSource(): SourceInterface;
+    public function getOrigin(): OriginInterface;
 
     /**
      * @return DestinationInterface

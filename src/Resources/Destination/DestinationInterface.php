@@ -10,6 +10,11 @@ namespace Transpox\Resources\Destination;
 interface DestinationInterface
 {
     /**
+     * @param array $headers
+     */
+    public function addHeaders($headers);
+
+    /**
      * Save the $content in the destination
      * @param $content
      */

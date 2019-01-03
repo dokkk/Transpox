@@ -5,9 +5,9 @@
  * Time: 20:01
  */
 
-namespace Transpox\Resources\Source;
+namespace Transpox\Resources\Destination;
 
-interface SourceInterface
+interface OriginInterface
 {
     /**
      * Return an array containing the source headers

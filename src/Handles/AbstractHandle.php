@@ -20,21 +20,21 @@ abstract class AbstractHandle implements HandleInterface
     protected $forceCheck;
 
     /**
-     * @var boolean $includeDestinationHeaders
+     * @var boolean $includeTargetsHeaders
      */
-    protected $includeDestinationHeaders;
+    protected $includeTargetsHeaders;
 
     /**
      * AbstractHandle constructor.
-     * if $includeDestinationHeaders is false, the destination is built without headers
+     * if $includeTargetsHeaders is false, the destination file is built without headers
      * @param ResourcesInterface $resources
      * @param bool $forceCheck
-     * @param bool $includeDestinationHeaders
+     * @param bool $includeTargetsHeaders
      */
-    public function __construct(ResourcesInterface $resources, bool $forceCheck = true, bool $includeDestinationHeaders = true)
+    public function __construct(ResourcesInterface $resources, bool $forceCheck = true, bool $includeTargetsHeaders = true)
     {
         $this->resources = $resources;
         $this->forceCheck = $forceCheck;
-        $this->includeDestinationHeaders = $includeDestinationHeaders;
+        $this->includeTargetsHeaders = $includeTargetsHeaders;
     }
 }

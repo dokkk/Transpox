@@ -9,14 +9,14 @@ namespace Transpox\Resources;
 
 use Transpox\Resources\Destination\DestinationInterface;
 use Transpox\Resources\Rules\RulesInterface;
-use Transpox\Resources\Source\SourceInterface;
+use Transpox\Resources\Destination\OriginInterface;
 
 class Resources implements ResourcesInterface
 {
     /**
-     * @var SourceInterface $source
+     * @var OriginInterface $origin
      */
-    protected $source;
+    protected $origin;
     /**
      * @var DestinationInterface $destination
      */
@@ -26,19 +26,19 @@ class Resources implements ResourcesInterface
      */
     protected $rules;
 
-    public function __construct(SourceInterface $source, DestinationInterface $destination, RulesInterface $rules = null)
+    public function __construct(OriginInterface $origin, DestinationInterface $destination, RulesInterface $rules = null)
     {
-        $this->source = $source;
+        $this->origin = $origin;
         $this->destination = $destination;
         $this->rules = $rules;
     }
 
     /**
-     * @return SourceInterface
+     * @return OriginInterface
      */
-    public function getSource(): SourceInterface
+    public function getOrigin(): OriginInterface
     {
-        return $this->source;
+        return $this->origin;
     }
 
     /**

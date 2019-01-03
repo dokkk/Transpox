@@ -13,42 +13,42 @@ use Transpox\Handles\RulesHandle;
 use Transpox\Resources\Destination\PhpOfficeDestination;
 use Transpox\Resources\Resources;
 use Transpox\Resources\Rules\JSON\JSONRules;
-use Transpox\Resources\Source\PhpOfficeSource;
+use Transpox\Resources\Destination\PhpOfficeOrigin;
 
 class RulesHandleTest extends TestCase
 {
-    public function testShouldThrowExceptionWhenSourcesAreMoreThanDestinationsAndForceCheckIsTrue()
+    public function testShouldThrowExceptionWhenSourcesAreMoreThanTargetsAndForceCheckIsTrue()
     {
         $this->expectException(ForceCheckException::class);
         $csvFile = '/Users/dcaruso/projects/Transpox/tests/files/toTransposeWithRules1.csv';
         $xlsFile = '/Users/dcaruso/projects/Transpox/tests/files/createdXlsWithRules1.xls';
-        $rulesFile = '/Users/dcaruso/projects/Transpox/tests/files/testRulesSourcesMoreThenDestinations.json';
-        $source = new PhpOfficeSource($csvFile);
+        $rulesFile = '/Users/dcaruso/projects/Transpox/tests/files/testRulesSourcesMoreThenTargets.json';
+        $source = new PhpOfficeOrigin($csvFile);
         $destination = new PhpOfficeDestination($xlsFile);
         $rules = new JSONRules($rulesFile);
         $resources = new Resources($source, $destination, $rules);
         new RulesHandle($resources);
     }
 
-    public function testShouldThrowExceptionWhenSameDestinationIsUsedMoreTimesAndForceCheckIsTrue()
+    public function testShouldThrowExceptionWhenSameTargetIsUsedMoreTimesAndForceCheckIsTrue()
     {
         $this->expectException(ForceCheckException::class);
         $csvFile = '/Users/dcaruso/projects/Transpox/tests/files/toTransposeWithRules1.csv';
         $xlsFile = '/Users/dcaruso/projects/Transpox/tests/files/createdXlsWithRules1.xls';
-        $rulesFile = '/Users/dcaruso/projects/Transpox/tests/files/testRulesSameDestinationMoreTimes.json';
-        $source = new PhpOfficeSource($csvFile);
+        $rulesFile = '/Users/dcaruso/projects/Transpox/tests/files/testRulesSameTargetMoreTimes.json';
+        $source = new PhpOfficeOrigin($csvFile);
         $destination = new PhpOfficeDestination($xlsFile);
         $rules = new JSONRules($rulesFile);
         $resources = new Resources($source, $destination, $rules);
         new RulesHandle($resources);
     }
 
-    /*public function testShouldTransposeCsvIntoXlsUsingOnlySourceNames()
+    public function testShouldTransposeCsvIntoXlsUsingOnlySourceNames()
     {
         $csvFile = '/Users/dcaruso/projects/Transpox/tests/files/toTransposeWithRules1.csv';
         $xlsFile = '/Users/dcaruso/projects/Transpox/tests/files/createdXlsWithRules1.xls';
         $rulesFile = '/Users/dcaruso/projects/Transpox/tests/files/testRulesOnlySourceNames.json';
-        $source = new PhpOfficeSource($csvFile);
+        $source = new PhpOfficeOrigin($csvFile);
         $destination = new PhpOfficeDestination($xlsFile);
         $rules = new JSONRules($rulesFile);
         $resource = new Resources($source, $destination, $rules);
@@ -56,5 +56,5 @@ class RulesHandleTest extends TestCase
         $basicHandle = new RulesHandle($resource, $forceCheck);
         $basicHandle->transpose();
         $this->assertFileExists($xlsFile, 'The file has not been created');
-    }*/
+    }
 }

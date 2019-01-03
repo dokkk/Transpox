@@ -5,21 +5,21 @@
  * Time: 23:14
  */
 
-namespace Transpox\Resources\Source;
+namespace Transpox\Resources\Destination;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Transpox\Resources\AbstractFile;
 
-class PhpOfficeSource extends AbstractFile implements SourceInterface
+class PhpOfficeOrigin extends AbstractFile implements OriginInterface
 {
     protected $headers;
     protected $content;
     protected $fullContent;
 
     /**
-     * PhpOfficeSource constructor.
+     * PhpOfficeOrigin constructor.
      * @param string $fileName
-     * @throws EmptySourceFileException
+     * @throws EmptyOriginFileException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      */
@@ -28,7 +28,7 @@ class PhpOfficeSource extends AbstractFile implements SourceInterface
         parent::__construct($fileName);
         $content = $this->getFileContent();
         if (empty($content)) {
-            throw new EmptySourceFileException('The Source file cannot be empty');
+            throw new EmptyOriginFileException('The origin file cannot be empty');
         }
         $this->fullContent = $this->readFullContent();
         $this->headers = $this->readHeaders();
@@ -75,7 +75,7 @@ class PhpOfficeSource extends AbstractFile implements SourceInterface
         if ($numberOfRows == 1) {
             return $rows;
         }
-        $rowIterator = $activeSheet->getRowIterator(1);
+        $rowIterator = $activeSheet->getRowIterator(2);
         foreach($rowIterator as $row) {
             $cellIterator = $row->getCellIterator();
             $cells = [];

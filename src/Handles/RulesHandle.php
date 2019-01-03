@@ -9,6 +9,7 @@ namespace Transpox\Handles;
 
 
 use Transpox\Resources\ResourcesInterface;
+use Transpox\Resources\Rules\JSON\JSONRules;
 
 class RulesHandle extends AbstractHandle
 {
@@ -17,9 +18,9 @@ class RulesHandle extends AbstractHandle
      * @inheritdoc
      * @throws ForceCheckException
      */
-    public function __construct(ResourcesInterface $resources, bool $forceCheck = true, bool $includeDestinationHeaders = true)
+    public function __construct(ResourcesInterface $resources, bool $forceCheck = true, bool $includeTargetsHeaders = true)
     {
-        parent::__construct($resources, $forceCheck, $includeDestinationHeaders);
+        parent::__construct($resources, $forceCheck, $includeTargetsHeaders);
         if ($this->resources->getRules() && $this->forceCheck) {
             $this->forceCheck();
         }
@@ -27,7 +28,28 @@ class RulesHandle extends AbstractHandle
 
     public function transpose()
     {
+        $resources = $this->resources;
+        $origin = $resources->getOrigin();
+        $destination = $resources->getDestination();
 
+        $sourceIdentifierType = $resources->getRules()->getSourcesIdentifierType();
+        $sources = $resources->getRules()->getSources();
+
+        //TO DO add headers to content (create a Content class?)
+
+        if ($sourceIdentifierType == JSONRules::VALUES_NAMES) {
+            if ($this->includeTargetsHeaders) {
+                $headers =  array_intersect($origin->getHeaders(), $sources);
+                $destination->addHeaders($headers);
+            }
+           foreach ($sources as $source) {
+               $targets[] = $source;
+           }
+        } else {
+
+        }
+        //$targets = $this->resources->getRules()->getTargets();
+        //$destination->save();
     }
 
     /**
@@ -35,46 +57,63 @@ class RulesHandle extends AbstractHandle
      */
     protected function forceCheck()
     {
-        $sources = $this->resources->getRules()->getSources();
-        $destinations = $this->resources->getRules()->getDestinations();
-        $rules = $this->resources->getRules()->getRules();
-        $numberOfSources = count($sources);
-        $numberOfDestinations = count($destinations);
-        if ($numberOfDestinations > 0 && $numberOfSources > $numberOfDestinations)
-        {
-            throw new ForceCheckException('The rules file contains more source fields than destinations fields');
-        }
+        $this->checkSourcesAndTargetsConsistency();
+        $this->checkRulesConsistency();
+    }
 
+    /**
+     * @throws ForceCheckException
+     */
+    protected function checkSourcesAndTargetsConsistency()
+    {
+        $sources = $this->resources->getRules()->getSources();
+        $targets = $this->resources->getRules()->getTargets();
+        $numberOfSources = count($sources);
+        $numberOfTargets = count($targets);
+        if ($numberOfTargets > 0 && $numberOfSources > $numberOfTargets)
+        {
+            throw new ForceCheckException('The rules file contains more source fields than targets fields');
+        }
+    }
+
+    /**
+     * @throws ForceCheckException
+     */
+    protected function checkRulesConsistency()
+    {
+        $rules = $this->resources->getRules()->getRules();
         if (!empty($rules)) {
-            $ruleDestinations = [];
+            $ruleTargets = [];
             foreach ($rules as $ruleName => $ruleTypes) {
                 foreach ($ruleTypes as $ruleType) {
-                    if (!property_exists($ruleType, 'destinations')) {
-                        throw new ForceCheckException('The rule "'.$ruleName.'" has no destinations');
+                    if (!property_exists($ruleType, 'targets')) {
+                        throw new ForceCheckException('The rule "'.$ruleName.'" has no targets');
                     }
 
-                    if (!property_exists($ruleType->destinations, 'names') &&
-                        !property_exists($ruleType->destinations, 'positions')) {
-                        throw new ForceCheckException('The rule "'.$ruleName.'" has no destination names nor positions');
+                    $ruleTypeTargets = $ruleType->targets;
+                    if (!property_exists($ruleTypeTargets, 'names') &&
+                        !property_exists($ruleTypeTargets, 'positions')) {
+                        throw new ForceCheckException('The rule "'.$ruleName.'" has no target names nor positions');
                     }
 
-                    if (property_exists($ruleType->destinations, 'names')) {
-                        $ruleDestinations = array_merge($ruleDestinations, $ruleType->destinations->names);
+                    if (property_exists($ruleTypeTargets, 'names')) {
+                        $ruleTargets = array_merge($ruleTargets, $ruleTypeTargets->names);
                     } else {
-                        $ruleDestinations = array_merge($ruleDestinations, $ruleType->destinations->positions);
+                        $ruleTargets = array_merge($ruleTargets, $ruleTypeTargets->positions);
                     }
                 }
             }
-            $redundantDestinations = array_diff_assoc($ruleDestinations, array_unique($ruleDestinations));
-            if (!empty($destinations)) {
-                $redundantDestinations = array_merge(
-                    $redundantDestinations,
-                    array_intersect($destinations, $ruleDestinations)
+            $redundantTargets = array_diff_assoc($ruleTargets, array_unique($ruleTargets));
+            $targets = $this->resources->getRules()->getTargets();
+            if (!empty($targets)) {
+                $redundantTargets = array_merge(
+                    $redundantTargets,
+                    array_intersect($targets, $ruleTargets)
                 );
-                $redundantDestinations = array_unique($redundantDestinations);
+                $redundantTargets = array_unique($redundantTargets);
             }
-            if ($redundantDestinations) {
-                throw new ForceCheckException('The destination/s: "'.implode(', ', $redundantDestinations).'" is/are used more times');
+            if ($redundantTargets) {
+                throw new ForceCheckException('The target/s: "'.implode(', ', $redundantTargets).'" is/are used more times');
             }
         }
     }

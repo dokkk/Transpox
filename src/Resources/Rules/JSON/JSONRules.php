@@ -9,10 +9,10 @@ namespace Transpox\Resources\Rules\JSON;
 
 
 use Transpox\Resources\AbstractFile;
-use Transpox\Resources\Rules\EmptyDestinationsException;
+use Transpox\Resources\Rules\EmptyTargetsException;
 use Transpox\Resources\Rules\EmptyRulesException;
 use Transpox\Resources\Rules\EmptySourcesException;
-use Transpox\Resources\Rules\RedundantDestinationsException;
+use Transpox\Resources\Rules\RedundantTargetsException;
 use Transpox\Resources\Rules\RedundantSourcesException;
 use Transpox\Resources\Rules\RulesInterface;
 
@@ -21,8 +21,8 @@ class JSONRules extends AbstractFile implements RulesInterface
     /** @var \stdClass|null $sources */
     private $sources;
 
-    /** @var \stdClass|null $destinations */
-    private $destinations;
+    /** @var \stdClass|null $targets */
+    private $targets;
 
     /** @var \stdClass|null $rules */
     private $rules;
@@ -33,11 +33,11 @@ class JSONRules extends AbstractFile implements RulesInterface
     /** @var string $sourceValuesType */
     private $sourceValuesType;
 
-    /** @var array $destinationValues */
-    private $destinationValues;
+    /** @var array $targetsValues */
+    private $targetsValues;
 
-    /** @var string $destinationValuesType */
-    private $destinationValuesType;
+    /** @var string $targetsValuesType */
+    private $targetsValuesType;
 
     /** @var string VALUES_NAMES */
     const VALUES_NAMES = "N";
@@ -50,10 +50,10 @@ class JSONRules extends AbstractFile implements RulesInterface
      * @throws BadJSONException
      * @throws EmptyJSONRulesFileException
      * @throws EmptySourcesException
-     * @throws EmptyDestinationsException
+     * @throws EmptyTargetsException
      * @throws EmptyRulesException
      * @throws RedundantSourcesException
-     * @throws RedundantDestinationsException
+     * @throws RedundantTargetsException
      */
     public function __construct($fileName)
     {
@@ -72,14 +72,14 @@ class JSONRules extends AbstractFile implements RulesInterface
         $this->sources = property_exists($content, 'sources') ? $content->sources : null;
         $this->checkSources();
 
-        $this->destinations = property_exists($content, 'destinations') ? $content->destinations : null;
-        $this->checkDestinations();
+        $this->targets = property_exists($content, 'targets') ? $content->targets : null;
+        $this->checkTargets();
 
         $this->rules = property_exists($content, 'rules') ? $content->rules : null;
         $this->checkRules();
 
         $this->setSourceValues();
-        $this->setDestinationValues();
+        $this->setTargetsValues();
     }
 
     /** @inheritdoc */
@@ -91,23 +91,23 @@ class JSONRules extends AbstractFile implements RulesInterface
     /**
      * @return string
      */
-    public function getSourceType()
+    public function getSourcesIdentifierType()
     {
         return $this->sourceValuesType;
     }
 
     /** @inheritdoc */
-    public function getDestinations()
+    public function getTargets()
     {
-        return $this->destinationValues;
+        return $this->targetsValues;
     }
 
     /**
      * @return string
      */
-    public function getDestinationType()
+    public function getTargetsIdentifierType()
     {
-        return $this->destinationValuesType;
+        return $this->targetsValuesType;
     }
 
     /** @inheritdoc */
@@ -134,18 +134,18 @@ class JSONRules extends AbstractFile implements RulesInterface
     }
 
     /**
-     * check if the destinations contains any value
-     * @throws EmptyDestinationsException
-     * @throws RedundantDestinationsException
+     * check if the targets contain any value
+     * @throws EmptyTargetsException
+     * @throws RedundantTargetsException
      */
-    protected function checkDestinations()
+    protected function checkTargets()
     {
-        if (!empty($this->destinations)) {
-            if (empty($this->destinations->names) && empty($this->destinations->positions)) {
-                throw new EmptyDestinationsException('The Rules file contains empty destinations');
+        if (!empty($this->targets)) {
+            if (empty($this->targets->names) && empty($this->targets->positions)) {
+                throw new EmptyTargetsException('The Rules file contains empty targets');
             }
-            if (!empty($this->destinations->names) && !empty($this->destinations->positions)) {
-                throw new RedundantDestinationsException('The Rules file contains destination swith both names and positions');
+            if (!empty($this->targets->names) && !empty($this->targets->positions)) {
+                throw new RedundantTargetsException('The Rules file contains targets with both names and positions');
             }
         }
     }
@@ -180,15 +180,15 @@ class JSONRules extends AbstractFile implements RulesInterface
     /**
      * set the source fields values and type, depending on if names or positions are set
      */
-    protected function setDestinationValues()
+    protected function setTargetsValues()
     {
-        if (!empty($this->destinations)) {
-            if (!empty($this->destinations->names)) {
-                $this->destinationValues = $this->destinations->names;
-                $this->destinationValuesType = static::VALUES_NAMES;
+        if (!empty($this->targets)) {
+            if (!empty($this->targets->names)) {
+                $this->targetsValues = $this->targets->names;
+                $this->targetsValuesType = static::VALUES_NAMES;
             } else {
-                $this->destinationValues = $this->destinations->positions;
-                $this->destinationValuesType = static::VALUES_POSITIONS;
+                $this->targetsValues = $this->targets->positions;
+                $this->targetsValuesType = static::VALUES_POSITIONS;
             }
         }
     }

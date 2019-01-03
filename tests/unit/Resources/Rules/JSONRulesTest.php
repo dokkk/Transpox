@@ -8,13 +8,13 @@
 namespace Transpox\Tests\Resources\Rules;
 
 use PHPUnit\Framework\TestCase;
-use Transpox\Resources\Rules\EmptyDestinationsException;
+use Transpox\Resources\Rules\EmptyTargetsException;
 use Transpox\Resources\Rules\EmptyRulesException;
 use Transpox\Resources\Rules\JSON\EmptyJSONRulesFileException;
 use Transpox\Resources\Rules\EmptySourcesException;
 use Transpox\Resources\Rules\JSON\JSONRules;
 use Transpox\Resources\Rules\JSON\BadJSONException;
-use Transpox\Resources\Rules\RedundantDestinationsException;
+use Transpox\Resources\Rules\RedundantTargetsException;
 use Transpox\Resources\Rules\RedundantSourcesException;
 
 class JSONRulesTest extends TestCase
@@ -47,17 +47,17 @@ class JSONRulesTest extends TestCase
         new JSONRules($fileName);
     }
 
-    public function testShouldThrowExceptionWhenDestinationsDoNotHaveNamesNorPositions()
+    public function testShouldThrowExceptionWhenTargetsDoNotHaveNamesNorPositions()
     {
-        $this->expectException(EmptyDestinationsException::class);
-        $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testRulesWithEmptyDestinations.json';
+        $this->expectException(EmptyTargetsException::class);
+        $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testRulesWithEmptyTargets.json';
         new JSONRules($fileName);
     }
 
-    public function testShouldThrowExceptionWhenDestinationsHasBothNamesAndPositions()
+    public function testShouldThrowExceptionWhenTargetsHasBothNamesAndPositions()
     {
-        $this->expectException(RedundantDestinationsException::class);
-        $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testRulesWithRedundantDestinations.json';
+        $this->expectException(RedundantTargetsException::class);
+        $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testRulesWithRedundantTargets.json';
         new JSONRules($fileName);
     }
 

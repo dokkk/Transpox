@@ -8,22 +8,22 @@
 namespace Transpox\Tests\Resources\Source;
 
 use PHPUnit\Framework\TestCase;
-use Transpox\Resources\Source\EmptySourceFileException;
-use Transpox\Resources\Source\PhpOfficeSource;
+use Transpox\Resources\Destination\EmptyOriginFileException;
+use Transpox\Resources\Destination\PhpOfficeOrigin;
 
 class PhpOfficeSourceTest extends TestCase
 {
     public function testShouldThrowEmptyRulesExceptionIfFileIsEmpty()
     {
-        $this->expectException(EmptySourceFileException::class);
+        $this->expectException(EmptyOriginFileException::class);
         $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testEmpty.csv';
-        $phpOfficeSource = new PhpOfficeSource($fileName);
+        $phpOfficeSource = new PhpOfficeOrigin($fileName);
     }
 
     public function testShouldReturnTrueWhenHeadersAreEmpty()
     {
         $fileName = '/Users/dcaruso/projects/Transpox/tests/files/testEmptyHeaders.csv';
-        $phpOfficeSource = new PhpOfficeSource($fileName);
+        $phpOfficeSource = new PhpOfficeOrigin($fileName);
         $headers = $phpOfficeSource->getHeaders();
         $this->assertEmpty($headers, 'Header array is not empty as expected');
     }

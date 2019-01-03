@@ -1,4 +1,4 @@
 {
   "sources": {"names": ["description", "name", "price"]},
-  "destinations": {"names": ["full_name", "address_name"]}
+  "targets": {"names": ["full_name", "address_name"]}
 }

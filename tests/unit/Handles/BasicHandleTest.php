@@ -7,12 +7,11 @@
 
 namespace Transpox\tests\unit\Handles;
 
-use Transpox\Handles\AbstractHandle;
 use PHPUnit\Framework\TestCase;
 use Transpox\Handles\BasicHandle;
 use Transpox\Resources\Destination\PhpOfficeDestination;
 use Transpox\Resources\Resources;
-use Transpox\Resources\Source\PhpOfficeSource;
+use Transpox\Resources\Destination\PhpOfficeOrigin;
 
 class BasicHandleTest extends TestCase
 {
@@ -20,7 +19,7 @@ class BasicHandleTest extends TestCase
     {
         $csvFile = '/Users/dcaruso/projects/Transpox/tests/files/toTranspose1.csv';
         $xlsFile = '/Users/dcaruso/projects/Transpox/tests/files/createdXls1.xls';
-        $source = new PhpOfficeSource($csvFile);
+        $source = new PhpOfficeOrigin($csvFile);
         $destination = new PhpOfficeDestination($xlsFile);
         $resource = new Resources($source, $destination);
         $basicHandle = new BasicHandle($resource);

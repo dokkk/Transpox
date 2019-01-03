@@ -13,10 +13,22 @@ interface RulesInterface
      * @return array
      */
     public function getSources();
+
+    /**
+     * @return string
+     */
+    public function getSourcesIdentifierType();
+
     /**
      * @return array
      */
-    public function getDestinations();
+    public function getTargets();
+
+    /**
+     * @return string
+     */
+    public function getTargetsIdentifierType();
+
     /**
      * @return array
      */

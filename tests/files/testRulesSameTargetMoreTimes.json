@@ -1,21 +1,21 @@
 {
-  "destinations": {"names": ["description", "price"]},
+  "targets": {"names": ["description", "price"]},
   "rules":
     {"math":
       [
         {
           "sources": {"name": ["name"]},
-          "destinations": {"names":["name", "description"]},
+          "targets": {"names":["name", "description"]},
           "params": ["-"]
         },
         {
           "sources": {"name": ["price", "discount"]},
-          "destinations": {"names":["price"]},
+          "targets": {"names":["price"]},
           "params": ["-"]
         },
         {
           "sources": {"name": ["price", "vat"]},
-          "destinations": {"names":["price"]},
+          "targets": {"names":["price"]},
           "params": ["*"]
         }
       ]

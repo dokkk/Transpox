@@ -8,7 +8,7 @@
 namespace Transpox\Resources\Rules;
 
 
-class RedundantDestinationsException extends \Exception
+class RedundantTargetsException extends \Exception
 {
 
 }

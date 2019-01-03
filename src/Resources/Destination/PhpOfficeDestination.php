@@ -8,20 +8,22 @@
 namespace Transpox\Resources\Destination;
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use Transpox\Resources\AbstractFile;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Transpox\Resources\ResourcesInterface;
 
-class PhpOfficeDestination extends AbstractFile implements DestinationInterface
+class PhpOfficeDestination extends AbstractDestination implements DestinationInterface
 {
-
     /**
-     * @var string $fileType
+     * @inheritdoc
      */
-    protected $fileType;
+    public function addHeaders($headers)
+    {
+
+    }
 
     /**
      * Save the $content in the destination
-     * @param $content
+     * @param Spreadsheet $content
      * @return string
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception

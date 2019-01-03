@@ -12,6 +12,6 @@ class BasicHandle extends AbstractHandle
 {
     public function transpose()
     {
-        $this->resources->getDestination()->save($this->resources->getSource()->getFullContent());
+        $this->resources->getDestination()->save($this->resources->getOrigin()->getFullContent());
     }
 }

@@ -1,5 +1,5 @@
 {
-  "destinations": {
+  "targets": {
     "names": ["description", "name", "price"],
     "positions":  [1, 2, 3]
   }
